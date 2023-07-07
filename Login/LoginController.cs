@@ -64,7 +64,7 @@ namespace Login
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromQuery] string username, [FromQuery] string password)
+        public async Task<IActionResult> Register([FromQuery] string username, [FromQuery] string password, [FromQuery] string email)
         {
             if (UserExists(username))
             {
@@ -74,7 +74,8 @@ namespace Login
             var user = new User
             {
                 Username = username,
-                Password = password
+                Password = password,
+                Email = email,
             };
 
             _context.Users.Add(user);

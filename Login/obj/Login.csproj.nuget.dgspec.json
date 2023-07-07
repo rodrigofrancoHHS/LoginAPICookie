@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rodrigo\\source\\repos\\Login\\Login\\Login.csproj": {}
+    "C:\\Users\\rodrigo\\Documents\\GitHub\\LoginAPICookie\\Login\\Login.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rodrigo\\source\\repos\\Login\\Login\\Login.csproj": {
+    "C:\\Users\\rodrigo\\Documents\\GitHub\\LoginAPICookie\\Login\\Login.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rodrigo\\source\\repos\\Login\\Login\\Login.csproj",
+        "projectUniqueName": "C:\\Users\\rodrigo\\Documents\\GitHub\\LoginAPICookie\\Login\\Login.csproj",
         "projectName": "Login",
-        "projectPath": "C:\\Users\\rodrigo\\source\\repos\\Login\\Login\\Login.csproj",
+        "projectPath": "C:\\Users\\rodrigo\\Documents\\GitHub\\LoginAPICookie\\Login\\Login.csproj",
         "packagesPath": "C:\\Users\\rodrigo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rodrigo\\source\\repos\\Login\\Login\\obj\\",
+        "outputPath": "C:\\Users\\rodrigo\\Documents\\GitHub\\LoginAPICookie\\Login\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rodrigo\\AppData\\Roaming\\NuGet\\NuGet.Config",

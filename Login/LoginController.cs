@@ -48,12 +48,13 @@ namespace Login
                         IsPersistent = false
                     });
 
-                return Ok();
+                return Ok(new { Id = user.Id }); // Retorne o ID do usuário na resposta
             }
 
             // Credenciais inválidas
             return Unauthorized();
         }
+
 
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()

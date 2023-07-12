@@ -14,5 +14,6 @@ namespace Login
         public string Password { get; set; }
 
         public string Email { get; set; }
+        public int Type { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace Login
                 var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, "User")
+            new Claim(ClaimTypes.Role, user.Type == 0 ? "Admin" : "User"), // Use o campo "Type" para definir a função/role do usuário
         };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -48,7 +48,7 @@ namespace Login
                         IsPersistent = false
                     });
 
-                return Ok(new { Id = user.Id }); // Retorne o ID do usuário na resposta
+                return Ok(new { Id = user.Id, Type = user.Type }); // Retorne o ID do usuário na resposta
             }
 
             // Credenciais inválidas
@@ -77,6 +77,7 @@ namespace Login
                 Username = username,
                 Password = password,
                 Email = email,
+                Type = 1 // Definir o valor padrão para 1 (usuário normal)
             };
 
             _context.Users.Add(user);
@@ -104,6 +105,19 @@ namespace Login
             return Ok(new { username });
         }
 
+
+        [HttpGet("{id}/Type")]
+        public async Task<IActionResult> GetUserType(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user.Type);
+        }
 
 
 

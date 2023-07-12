@@ -22,37 +22,52 @@ namespace Login
         }
 
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        {
+            var users = await _context.Users.ToListAsync();
+            return Ok(users);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
             // Verifique as credenciais do usuário
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
 
             if (user != null)
             {
-                // Crie uma identidade para o usuário autenticado
-                var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, user.Type == 0 ? "Admin" : "User"), // Use o campo "Type" para definir a função/role do usuário
-        };
+                if (user.Password == password)
+                {
+                    // Crie uma identidade para o usuário autenticado
+                    var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, user.Type == 0 ? "Admin" : "User"), // Use o campo "Type" para definir a função/role do usuário
+            };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                // Faça a autenticação do usuário
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity),
-                    new AuthenticationProperties
-                    {
-                        IsPersistent = false
-                    });
+                    // Faça a autenticação do usuário
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        new AuthenticationProperties
+                        {
+                            IsPersistent = false
+                        });
 
-                return Ok(new { Id = user.Id, Type = user.Type }); // Retorne o ID do usuário na resposta
+                    return Ok(new { Id = user.Id, Type = user.Type }); // Retorne o ID do usuário na resposta
+                }
+                else
+                {
+                    // Senha incorreta
+                    return Unauthorized("Senha incorreta");
+                }
             }
 
-            // Credenciais inválidas
-            return Unauthorized();
+            // Usuário não encontrado
+            return Unauthorized("Usuário não encontrado");
         }
 
 
@@ -117,6 +132,25 @@ namespace Login
             }
 
             return Ok(user.Type);
+        }
+
+
+        [HttpPost("ChangeUserType/{id}")]
+        public async Task<IActionResult> ChangeUserType(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound(); // Utilizador não encontrado
+            }
+
+            // Alterar o valor do campo 'type'
+            user.Type = user.Type == 0 ? 1 : 0;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(); // Sucesso na alteração do tipo do utilizador
         }
 
 

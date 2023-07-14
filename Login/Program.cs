@@ -1,9 +1,13 @@
 using Login;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +26,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/api/accessdenied"; // Define a rota para a ação de acesso negado
     });
 
+
+// Configuração da autorização
+builder.Services.AddAuthorization();
+
+
 // Adicione outros serviços necessários
 
 builder.Services.AddControllers();
@@ -32,14 +41,13 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseStaticFiles();
 
 app.UseRouting();
 
@@ -49,6 +57,10 @@ app.UseCors(builder => builder
     .AllowAnyHeader()
     .AllowCredentials()
 );
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

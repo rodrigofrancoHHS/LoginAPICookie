@@ -84,7 +84,12 @@ namespace Login
         {
             if (UserExists(username))
             {
-                return BadRequest("Username already exists.");
+                return BadRequest("Utilizador já existente.");
+            }
+
+            if (EmailExists(email))
+            {
+                return BadRequest("Email já existente.");
             }
 
             var user = new User
@@ -158,6 +163,11 @@ namespace Login
         private bool UserExists(string username)
         {
             return _context.Users.Any(u => u.Username == username);
+        }
+
+        private bool EmailExists(string email)
+        {
+            return _context.Users.Any(u => u.Email == email);
         }
 
     }
